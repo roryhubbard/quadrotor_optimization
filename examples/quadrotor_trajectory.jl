@@ -12,14 +12,17 @@ function test()
   model = Model(Ipopt.Optimizer)
 
   # constants
-  n = 20 # number of timesteps
+  n = 10 # number of timesteps
   g = 9.8 # gravitational constant
+
+  # crazyflie 2.1 specs
   m = .027 # mass (kg)
   l = .092 # length (m)
   I = 1/12 * m * l^2
 
   u_min = -5
   u_max = 5
+  max_tilt = π/2
 
   @variables(model, begin
     X[1:6, 1:n+1]
@@ -33,9 +36,9 @@ function test()
   A = [1 Δt 0  0     0  0
        0  1 0  0 -g*Δt  0
        0  0 1 Δt     0  0
-       0  0 0  0     0  0
+       0  0 0  1     0  0
        0  0 0  0     1 Δt
-       0  0 0  0     0  0]
+       0  0 0  0     0  1]
   B = [   0    0
           0    0
           0    0
@@ -49,7 +52,7 @@ function test()
 
   @constraints(model, begin
     dynamics[i=1:n], X[:, i+1] .== A * X[:, i] + B * U[:, i] + affine_term
-    tilt[i=1:n+1], -π/2 <= X[5, i] <= π/2
+    tilt[i=1:n+1], -max_tilt <= X[5, i] <= max_tilt
     initial_state, X[:, 1]   .== xi
     final_state,   X[:, end] .== xf
   end)
