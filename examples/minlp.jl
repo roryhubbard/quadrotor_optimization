@@ -1,4 +1,5 @@
-using BranchAndBound
+include("../src/BranchAndBound.jl")
+using .BranchAndBound
 using JuMP
 using Ipopt
 

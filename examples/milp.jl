@@ -1,11 +1,12 @@
-using BranchAndBound
+include("../src/BranchAndBound.jl")
+using .BranchAndBound
 using JuMP
-using GLPK
+using OSQP
 
 const BB = BranchAndBound
 
 # continuous relaxation of MILP
-m = Model(GLPK.Optimizer)
+m = Model(OSQP.Optimizer)
 
 # The following will be supported in the later version of JuMP.
 # @variable(m, x >= 0, Int)
