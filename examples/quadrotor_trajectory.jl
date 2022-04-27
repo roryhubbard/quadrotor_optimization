@@ -66,7 +66,7 @@ end
 
 function maximize_alititude_integer_study()
   n = 10 # number of timesteps
-  i = [9, 5, 1]
+  i = [1, 5, 9]
   a = Vector{Vector{Float64}}()
   b = Vector{Vector{Float64}}()
   for i_ in i
@@ -74,9 +74,12 @@ function maximize_alititude_integer_study()
     push!(a, rx)
     push!(b, ru)
   end
-  p1 = plot(a, ylabel="altitude (m)", legend_position=:topleft)
+  p1 = plot(a[1], label="z₃=1", ylabel="altitude (m)", legend_position=:topleft)
+  plot!(p1, a[2], label="z₃=5", ylabel="altitude (m)", legend_position=:topleft)
+  plot!(p1, a[3], label="z₃=9", ylabel="altitude (m)", legend_position=:topleft)
   p2 = plot(b, ylabel="thrust (N)", legend_position=false)
-  plot(p1, p2, layout=(2, 1), xlabel = "z₃")
+  fig = plot(p1, p2, layout=(2, 1), xlabel = "timesteps")
+  savefig(fig, "fig")
 end
 
 function minimum_time_trajectory()
